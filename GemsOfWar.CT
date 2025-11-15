@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>51</ID>
+      <Description>"BOOM [aob] v8.xx with Init Health"</Description>
+      <Color>0000FF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(INJhealt,GameAssembly.dll,89 47 10 8B 16) // should be unique
+alloc(newmem,$1000)
+alloc(execCount,4)
+
+//label(code)
+label(return)
+label(skipZeroing)
+
+newmem:
+  inc dword ptr [execCount]         // crește contorul
+  cmp dword ptr [execCount], 5      // dacă execuția e &gt;=5, setează eax = 0
+  jl skipZeroing
+  xor eax, eax                      // setează eax = 0
+
+skipZeroing:
+  mov [edi+10],eax
+  mov edx,[esi]
+  jmp return
+
+INJhealt:
+  jmp newmem
+return:
+registersymbol(INJhealt)
+
+[DISABLE]
+INJhealt:
+  db 89 47 10 8B 16
+
+unregistersymbol(INJhealt)
+dealloc(newmem)
+dealloc(execCount)
+
+</AssemblerScript>
+      <Hotkeys>
+        <Hotkey>
+          <Action>Toggle Activation</Action>
+          <Keys>
+            <Key>32</Key>
+          </Keys>
+          <ID>0</ID>
+        </Hotkey>
+      </Hotkeys>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>10</ID>
+      <Description>"All Rewards v8.9"</Description>
+      <Color>008000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: // Reward.AddGold
+mov eax,(int)5
+add [ecx+0C],00000064 //add more gold
+add [ecx+14],(int)40  //add more souls
+add [ecx+20],(int)1   //add XP , Max is 10 but as a precaution, do not change the default value
+add [ecx+18],(int)5   //add 5 keys, Max is 5
+add [ecx+1C],(int)2   //add 2 Treasure Maps, Maxim is 10
+
+
+
+
+originalcode:
+add [ecx+10],eax      //add 5 gems, Max is 5
+pop ebp
+ret
+
+exit:
+jmp returnhere
+
+"GameAssembly.dll"+AEA959:
+jmp newmem
+returnhere:
+
+
+
+
+[DISABLE]
+dealloc(newmem)
+"GameAssembly.dll"+AEA959:
+db 01 41 0C 5D C3
+//add [ecx+0C],eax         //Reward.AddGold
+//pop ebp
+//ret
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+</CheatTable>
