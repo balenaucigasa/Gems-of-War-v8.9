@@ -5,6 +5,7 @@ This is the new way to play GOW
 1. activate
 
 [x] "BOOM [aob] v8.xx with Init Health"
+
 [x] "All Rewards v8.9"
 
 2. start battle
